@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Sparkles, TrendingUp } from "lucide-react";
+import { Sparkles, TrendingUp, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import ForecastForm from "@/components/ForecastForm";
 import PredictionResult from "@/components/PredictionResult";
 
@@ -7,12 +9,15 @@ export interface PredictionData {
   predicted_demand: number;
 }
 
-const Index = () => {
+const Model = () => {
+  const navigate = useNavigate();
   const [prediction, setPrediction] = useState<PredictionData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentInventory, setCurrentInventory] = useState<number>(0);
 
-  const handlePrediction = (data: PredictionData) => {
+  const handlePrediction = (data: PredictionData, inventory: number) => {
     setPrediction(data);
+    setCurrentInventory(inventory);
   };
 
   return (
@@ -22,6 +27,16 @@ const Index = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/5 to-transparent pointer-events-none" />
         
         <div className="container mx-auto max-w-6xl relative z-10">
+          {/* Back Button */}
+          <Button 
+            variant="ghost" 
+            className="mb-8 animate-fade-in"
+            onClick={() => navigate('/')}
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Home
+          </Button>
+
           <div className="text-center mb-16 animate-fade-in">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6">
               <Sparkles className="w-4 h-4" />
@@ -70,7 +85,7 @@ const Index = () => {
           {/* Results */}
           {prediction && (
             <div className="mt-12 animate-slide-up">
-              <PredictionResult prediction={prediction} />
+              <PredictionResult prediction={prediction} currentInventory={currentInventory} />
             </div>
           )}
         </div>
@@ -79,4 +94,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Model;

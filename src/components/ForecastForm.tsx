@@ -6,7 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { Loader2, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import ImageSelector from "./ImageSelector";
-import type { PredictionData } from "@/pages/Index";
+import type { PredictionData } from "@/pages/Model";
 
 // Import all category images
 import groceries from "@/assets/category-groceries.jpg";
@@ -33,7 +33,7 @@ import spring from "@/assets/season-spring.jpg";
 import autumn from "@/assets/season-autumn.jpg";
 
 interface ForecastFormProps {
-  onPrediction: (data: PredictionData) => void;
+  onPrediction: (data: PredictionData, inventory: number) => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
 }
@@ -100,7 +100,7 @@ const ForecastForm = ({ onPrediction, isLoading, setIsLoading }: ForecastFormPro
       }
 
       const data = await response.json();
-      onPrediction(data);
+      onPrediction(data, formData.Inventory);
       toast.success("Prediction generated successfully!");
     } catch (error) {
       console.error("Error:", error);
