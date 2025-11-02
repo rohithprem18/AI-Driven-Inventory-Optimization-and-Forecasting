@@ -35,14 +35,22 @@ const PredictionResult = ({ prediction, currentInventory = 0 }: PredictionResult
   // Generate trend data for the chart (simulated weekly projection)
   const generateTrendData = () => {
     const weeks = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-    const baseValue = demand / 4;
-    return weeks.map((week, index) => ({
-      week,
-      demand: Math.round(baseValue * (1 + (Math.random() * 0.3 - 0.15))),
-      projected: Math.round(baseValue),
-      lower: Math.round((baseValue - confidenceMargin / 4)),
-      upper: Math.round((baseValue + confidenceMargin / 4)),
-    }));
+    const weeklyDemand = demand / 4; // Average weekly demand
+    const weeklyConfidence = confidenceMargin / 4;
+    
+    // Create a realistic upward or stable trend based on demand level
+    const trendFactor = demandInfo.level === "High" ? 1.05 : demandInfo.level === "Medium" ? 1.02 : 1.0;
+    
+    return weeks.map((week, index) => {
+      const weekValue = Math.round(weeklyDemand * Math.pow(trendFactor, index));
+      return {
+        week,
+        demand: weekValue,
+        projected: Math.round(weeklyDemand),
+        lower: Math.round(weekValue - weeklyConfidence),
+        upper: Math.round(weekValue + weeklyConfidence),
+      };
+    });
   };
 
   const trendData = generateTrendData();
