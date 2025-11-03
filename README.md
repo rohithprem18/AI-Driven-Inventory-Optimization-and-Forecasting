@@ -1,4 +1,4 @@
-# Aisle Analyzer - AI Inventory Forecasting
+# Inventra - AI Inventory Forecasting
 
 ## Project Overview
 
